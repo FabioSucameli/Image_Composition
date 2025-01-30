@@ -1,4 +1,5 @@
 import os
+import cv2
 from image_utils import load_images, overlay_image_alpha, save_images
 
 def main():
@@ -8,7 +9,7 @@ def main():
 
     # Caricamento delle immagini e overlay
     images, image_paths = load_images(input_dir)
-    overlay = load_images(overlay_path, is_overlay=True)
+    overlay = cv2.imread(overlay_path, cv2.IMREAD_UNCHANGED)
 
     if overlay is None:
         raise FileNotFoundError("Immagine del gatto non trovata!")
