@@ -3,8 +3,8 @@ import cv2
 from glob import glob
 
 # Caricamento di tutte le immagini
-def load_images(input_dir):
-    image_paths = glob(os.path.join(input_dir, "*.png"))
+def load_images(input_dir, max_images):
+    image_paths = glob(os.path.join(input_dir, "*.png"))[:max_images]
     images = [cv2.imread(img_path, cv2.IMREAD_COLOR) for img_path in image_paths]
     #  print(f"Trovate {len(image_paths)} immagini")  # DEBUG
     return images, image_paths
