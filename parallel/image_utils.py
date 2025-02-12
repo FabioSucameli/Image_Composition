@@ -43,6 +43,10 @@ def overlay_image_alpha(background, overlay, x, y):
 
     return background
 
+# Esecuzione overlay_image_alpha in un thread separato per evitare il blocco del main event loop
+async def process_image(img, overlay, x_offset, y_offset):
+    return await asyncio.to_thread(overlay_image_alpha, img.copy(), overlay, x_offset, y_offset)
+
 # Scrittura di un'immagine in modo asincrono
 async def async_cv2_imwrite(path, img):
     await asyncio.to_thread(cv2.imwrite, path, img)

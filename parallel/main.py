@@ -1,9 +1,9 @@
-import time
 import asyncio
+import time
 import cv2
-from image_utils import overlay_image_alpha, load_images, save_images
+from image_utils import load_images, save_images, process_image
 
-NUM_IMAGES = 100
+NUM_IMAGES = 500
 
 async def main():
     input_dir = "../input_img"
@@ -19,13 +19,15 @@ async def main():
     if overlay is None:
         raise FileNotFoundError("Immagine del gatto non trovata!")
 
-    # Applicazione della sovrapposizione
-    augmented_images = []
+    # Creazione di una lista di Task per elaborare le immagini in parallelo
+    x_offset = 800
+    y_offset = 500
+    tasks = []
     for img in images:
-        x_offset = 800
-        y_offset = 500
-        augmented_img = overlay_image_alpha(img.copy(), overlay, x_offset, y_offset)
-        augmented_images.append(augmented_img)
+        tasks.append(asyncio.create_task(process_image(img, overlay, x_offset, y_offset)))
+
+    # Attendere il completamento di tutte le operazioni di sovrapposizione
+    augmented_images = await asyncio.gather(*tasks)
 
     # Salvataggio asincrono
     await save_images(augmented_images, output_dir)
